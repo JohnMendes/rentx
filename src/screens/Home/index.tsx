@@ -1,10 +1,13 @@
-import React from 'react';
-import { StatusBar, Button } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StatusBar } from 'react-native';
 import { RFValue } from "react-native-responsive-fontsize";
 import { useNavigation } from '@react-navigation/native';
+import { Load } from '../../components/Load'
 
 import Logo from '../../assets/logo.svg';
-import { Car } from "../../components/Car"
+import { Car } from "../../components/Car";
+import { api } from '../../services/api';
+import { CarDTO } from '../../dtos/CarDTO'
 
 import { Container, Header, TotalCars, HeaderContent, CarsList } from './styles';
 
@@ -13,6 +16,8 @@ type NavigationProps = {
 };
 
 export function Home() {
+  const [cars, setCars] = useState<CarDTO[]>([]);
+  const [loading, setLoading] = useState(true)
 
   const navigation = useNavigation<NavigationProps>();
 
@@ -30,6 +35,20 @@ export function Home() {
     navigation.navigate("CarDetails");
   }
 
+  useEffect(() => {
+    async function fetchCars() {
+      try {
+        const response = await api.get("/cars")
+        setCars(response.data)
+      } catch (error) {
+        console.log(error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchCars()
+  }, [])
+
   return (
     <Container>
       <StatusBar barStyle='light-content' backgroundColor="transparent" translucent />
@@ -39,13 +58,14 @@ export function Home() {
           <TotalCars>Total de 12 carros</TotalCars>
         </HeaderContent>
       </Header>
-      <Button title='Teste' onPress={handleCarDetails}></Button>
-      <CarsList
-        data={[1, 2]}
-        keyExtractor={item => String(item)}
-        renderItem={({ item }) =>
-          <Car data={carData} onPress={handleCarDetails} />
-        } />
+      {loading ? <Load /> :
+        <CarsList
+          data={cars}
+          keyExtractor={item => item.id}
+          renderItem={({ item }) =>
+            <Car data={item} onPress={handleCarDetails} />
+          } />
+      }
 
 
     </Container>
