@@ -12,7 +12,12 @@ import { CarDTO } from '../../dtos/CarDTO'
 import { Container, Header, TotalCars, HeaderContent, CarsList } from './styles';
 
 type NavigationProps = {
-  navigate: (screen: string) => void;
+  navigate:(
+    screen: string,
+    carObject:{
+      car: CarDTO
+    }
+  ) => void
 };
 
 export function Home() {
@@ -20,19 +25,8 @@ export function Home() {
   const [loading, setLoading] = useState(true)
 
   const navigation = useNavigation<NavigationProps>();
-
-  const carData = {
-    brand: "Audi",
-    name: "RS 5 Coupé",
-    rent: {
-      period: "Ao dia",
-      price: 300,
-    },
-    thumbnail: "https://www.webmotors.com.br/imagens/prod/348415/AUDI_RS5_2.9_V6_TFSI_GASOLINA_SPORTBACK_QUATTRO_STRONIC_34841515593745747.png?s=fill&w=440&h=330&q=80&t=true",
-  }
-
-  function handleCarDetails() {
-    navigation.navigate("CarDetails");
+  function handleCarDetails(car: CarDTO) {
+    navigation.navigate("CarDetails", { car });
   }
 
   useEffect(() => {
@@ -63,7 +57,7 @@ export function Home() {
           data={cars}
           keyExtractor={item => item.id}
           renderItem={({ item }) =>
-            <Car data={item} onPress={handleCarDetails} />
+            <Car data={item} onPress={() => handleCarDetails(item)} />
           } />
       }
 
