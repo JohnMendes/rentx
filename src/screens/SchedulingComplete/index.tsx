@@ -7,15 +7,14 @@ import DoneSvg from '../../assets/done.svg'
 import { Container, Content, Title, Message, Footer } from './styles';
 import { ConfirmButton } from '../../components/ConfirmButton';
 
-type NavigationProps = {
-  navigate: (screen: string) => void;
-};
 export function SchedulingComplete() {
   const { width } = useWindowDimensions();
-  const navigation = useNavigation<NavigationProps>();
+  const navigation = useNavigation();
   function handleConfirm() {
     navigation.navigate("Home");
   }
+
+  
 
   return (
     <Container>

@@ -7,8 +7,8 @@ export function generateInterval(startDate: DayProps, endDate: DayProps) {
   let interval: MarkerDateProps = {};
 
   eachDayOfInterval({
-    start: parseISO(startDate.dayString),
-    end: parseISO(endDate.dayString),
+    start: parseISO(startDate.dateString),
+    end: parseISO(endDate.dateString),
   }).forEach((item) => {
     const date = format(item, "yyyy-MM-dd");
 
@@ -16,11 +16,11 @@ export function generateInterval(startDate: DayProps, endDate: DayProps) {
       ...interval,
       [date]: {
         color:
-          startDate.dayString === date || endDate.dayString === date
+          startDate.dateString === date || endDate.dateString === date
             ? theme.colors.main
             : theme.colors.main_light,
         textColor:
-          startDate.dayString === date || endDate.dayString === date
+          startDate.dateString === date || endDate.dateString === date
             ? theme.colors.main_light
             : theme.colors.main,
       },

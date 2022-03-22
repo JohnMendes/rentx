@@ -20,7 +20,7 @@ interface MarkerDateProps {
 }
 
 interface DayProps {
-  dayString:string;
+  dateString:string;
   day: number;
   month: number;
   year:number;

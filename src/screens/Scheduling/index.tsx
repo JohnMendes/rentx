@@ -9,13 +9,12 @@ import { Container, Header, Title, RentalPeriod, DataInfo, DataTitle, DataValue,
 import { Alert, StatusBar } from 'react-native';
 import { Button } from '../../components/Button';
 import { Calendar, DayProps, generateInterval, MarkerDateProps } from '../../components/Calendar';
-import { getPlataformDate } from '../../utils/getPlataformDate'
 import { format, parseISO } from 'date-fns';
 import { CarDTO } from '../../dtos/CarDTO';
 
 interface RentalPeriod {
-  startFormated: string;
-  endFormated: string;
+  startFormatted: string;
+  endFormatted: string;
 }
 interface Params {
   car: CarDTO
@@ -32,14 +31,11 @@ export function Scheduling() {
   const { car } = route.params as Params;
 
   function handleConfirmRental() {
-    if (!rentalPeriod.startFormated || rentalPeriod.endFormated ) {
-      Alert.alert("Selecione o intervalo para alugar")
-    }else{
+    
       navigation.navigate("SchedulingDetails", {
         car,
         dates:Object.keys(markedDates)
-      });
-    }    
+      });  
   }
 
   function handleGoBack() {
@@ -65,8 +61,8 @@ export function Scheduling() {
     const endDate = Object.keys(interval)[Object.keys(interval).length - 1];
 
     setRentalPeriod({
-      startFormated: format(parseISO(firstDate), "dd/MM/yyyy"),
-      endFormated: format(parseISO(endDate), 'dd/MM/yyyy')
+      startFormatted: format(parseISO(firstDate), "dd/MM/yyyy"),
+      endFormatted: format(parseISO(endDate), 'dd/MM/yyyy')
     })
 
   }
@@ -82,14 +78,14 @@ export function Scheduling() {
 
           <DataInfo>
             <DataTitle>DE</DataTitle>
-            <DataValue selected={!!rentalPeriod.startFormated}>{rentalPeriod.startFormated}</DataValue>
+            <DataValue selected={!!rentalPeriod.startFormatted}>{rentalPeriod.startFormatted}</DataValue>
           </DataInfo>
 
           <ArrowSvg />
 
           <DataInfo>
             <DataTitle>DE</DataTitle>
-            <DataValue selected={!!rentalPeriod.endFormated}>{rentalPeriod.endFormated}</DataValue>
+            <DataValue selected={!!rentalPeriod.endFormatted}>{rentalPeriod.endFormatted}</DataValue>
           </DataInfo>
 
         </RentalPeriod>
@@ -99,7 +95,7 @@ export function Scheduling() {
         <Calendar markedDates={markedDates} onDayPress={handleChangeDate} />
       </Content>
       <Footer>
-        <Button title='Confirmar' onPress={handleConfirmRental} />
+        <Button title='Confirmar' onPress={handleConfirmRental} enabled={!!rentalPeriod.startFormatted} />
       </Footer>
 
     </Container>
